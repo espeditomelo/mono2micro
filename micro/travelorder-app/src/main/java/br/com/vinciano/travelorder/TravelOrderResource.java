@@ -3,10 +3,8 @@ package br.com.vinciano.travelorder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.vinciano.flight.Flight;
-import br.com.vinciano.flight.FlightResource;
-import br.com.vinciano.hotel.Hotel;
-import br.com.vinciano.hotel.HotelResource;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
@@ -21,10 +19,12 @@ import jakarta.ws.rs.core.MediaType;
 public class TravelOrderResource {
 
     @Inject 
-    FlightResource flightResource;
+    @RestClient
+    FlightService flightService;
 
     @Inject
-    HotelResource hotelResource;
+    @RestClient
+    HotelService hotelService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,8 +33,8 @@ public class TravelOrderResource {
             .map(
                 order -> TravelOrderDTO.of(
                     order, 
-                    flightResource.findByTravelOrderId(order.id),
-                    hotelResource.findByTravelOrderId(order.id)
+                    flightService.findByTravelOrderId(order.id),
+                    hotelService.findByTravelOrderId(order.id)
             )
             ).collect(Collectors.toList());
     }
@@ -56,15 +56,15 @@ public class TravelOrderResource {
         order.persist();
 
         Flight flight = new Flight();
-        flight.fromAirport = orderDTO.getFromAirport();
-        flight.toAirport = orderDTO.getToAirport();
-        flight.travelOrderId = order.id;
-        flightResource.newFlight(flight);
+        flight.setFromAirport(orderDTO.getFromAirport());
+        flight.setToAirport(orderDTO.getToAirport());
+        flight.setTravelOrderId(order.id);
+        flightService.newFlight(flight);
 
         Hotel hotel = new Hotel();
-        hotel.nights = orderDTO.getNights();
-        hotel.travelOrderId = order.id;
-        hotelResource.newHotel(hotel);
+        hotel.setNights(orderDTO.getNights());
+        hotel.setTravelOrderId(order.id);
+        hotelService.newHotel(hotel);
 
         return order;
     }
