@@ -22,6 +22,15 @@ public class TravelOrderDTO {
 
     // para quando for listar todas as order esse builder facilitará para pegar os dados
     public static TravelOrderDTO of(TravelOrder travelOrder, Flight flight, Hotel hotel){
+
+        if (flight == null){
+            flight = new Flight();
+        }
+
+        if(hotel == null){
+            hotel = new Hotel();
+        }
+
         return new TravelOrderDTO(flight.fromAirport, flight.toAirport, hotel.nights);
     }
 

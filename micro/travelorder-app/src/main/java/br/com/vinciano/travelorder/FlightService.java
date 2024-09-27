@@ -19,6 +19,11 @@ public interface FlightService {
     public Flight findById(@QueryParam("id") Long id);
 
     @GET
+    @Path("findById")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Hotel findById(@QueryParam("id") long id);
+
+    @GET
     @Path("findByTravelOrderId")
     @Produces(MediaType.APPLICATION_JSON)
     public Flight findByTravelOrderId(@QueryParam("travelOrderId") long travelOrderId);
