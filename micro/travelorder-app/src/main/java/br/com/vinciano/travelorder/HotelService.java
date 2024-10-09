@@ -15,7 +15,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-@RegisterRestClient(baseUri = "http://localhost:8091/hotel")
+@RegisterRestClient(baseUri = "http://hotel-app-espeditomelo-dev.apps.sandbox-m3.1530.p1.openshiftapps.com/hotel")
 public interface HotelService {
 
     @GET
